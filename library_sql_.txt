@@ -1,0 +1,11 @@
+CREATE DATABASE library;
+
+USE library
+
+CREATE TABLE books ( b_id BIGINT NOT NULL AUTO_INCREMENT , title VARCHAR(50) NOT NULL , author VARCHAR(50) , genre VARCHAR(50) , available INT(1) NOT NULL DEFAULT 1 , PRIMARY KEY (b_id) );
+
+CREATE TABLE members ( m_id BIGINT PRIMARY KEY AUTO_INCREMENT , name VARCHAR(50) NOT NULL , phone_no BIGINT , reg_date VARCHAR(10) , exp_date VARCHAR(10) );
+
+CREATE TABLE status ( sr_no BIGINT PRIMARY KEY AUTO_INCREMENT , b_id BIGINT NOT NULL , m_id BIGINT NOT NULL , iss_date VARCHAR(10) , exp_date VARCHAR(10) , ret_date VARCHAR(10) );
+
+ALTER TABLE status ADD FOREIGN KEY (b_id) REFERENCES books(b_id), ADD FOREIGN KEY (m_id) REFERENCES members(m_id);
