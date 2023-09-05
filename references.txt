@@ -2,4 +2,5 @@ https://www.simplilearn.com/tutorials/sql-tutorial/sql-advanced
 https://www.guru99.com/er-diagram-tutorial-dbms.html
 https://www.edrawsoft.com/article/er-diagrams-for-library-management-system.html
 https://stackoverflow.com/questions/6889065/inserting-multiple-rows-in-mysql    (for inserting multiple rows at once)
-https://stackoverflow.com/questions/20452820/how-do-you-create-a-super-key-in-a-table (superkey creation)
+https://stackoverflow.com/questions/20452820/how-do-you-create-a-super-key-in-a-table   (superkey creation)
+https://www.educba.com/alternate-key-in-sql/    (Alternate key declaration with example)
