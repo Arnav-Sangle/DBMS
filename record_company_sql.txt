@@ -1,0 +1,188 @@
+CREATE DATABASE record_company;
+
+USE record_company;
+
+CREATE TABLE bands (
+id INT NOT NULL AUTO_INCREMENT,
+name VARCHAR(255) NOT NULL,
+PRIMARY KEY (id)
+);
+
+CREATE TABLE artists (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE albums (
+id INT NOT NULL AUTO_INCREMENT,
+name VARCHAR(255) NOT NULL,
+release_year INT NOT NULL,
+band_id INT NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (band_id) REFERENCES bands(id)
+);
+
+# removing not null constraint from release_year by setting it to null
+ALTER TABLE albums MODIFY release_year INT NULL;
+
+# adding a column in existing table
+# adding foreign key to a existing table
+ALTER TABLE albums 
+ADD COLUMN artist_id INT NOT NULL,
+ADD FOREIGN KEY (artist_id) REFERENCES artists(id);
+
+# to change the starting value for an AUTO_INCREMENT column using the ALTER TABLE
+ALTER TABLE bands AUTO_INCREMENT = 101;
+ALTER TABLE artists AUTO_INCREMENT = 201;
+
+ALTER TABLE albums 
+MODIFY band_id INT NULL,
+MODIFY artist_id INT NULL;
+
+/*
+ALTER TABLE albums
+MODIFY band_id VARCHAR(20) NOT NULL DEFAULT 'NA',
+MODIFY artist_id VARCHAR(20) NOT NULL DEFAULT 'NA';
+*/
+
+# id is not required for insert into, coz automattically increment ()
+INSERT INTO bands (name) 
+VALUES ('Iron Maiden');
+
+# insert mutliple rows
+INSERT INTO bands (name) 
+VALUES ('Deuce'), ('Avenge Sevenfold'), ('Ankor');
+
+SELECT * FROM bands;
+
+-- ctrl+/ to toggle comments 
+-- DELETE FROM bands;		# deletes all rows
+/* 
+if Error, disable 'Safe mode', 
+	1. Edit -> Prefrences -> SQL Editor -> Safe Updates Checkbox uncheck  Query
+	2. Query -> Recconect to server
+*/
+
+DELETE FROM bands
+WHERE id BETWEEN 105 AND 108;
+# inclusive of 105 & 108
+
+SELECT * FROM bands LIMIT 2;
+
+SELECT name FROM bands;
+
+#rename multiple cols while displaying, not permanent
+SELECT id AS 'ID', name AS 'Band Name'
+FROM bands;
+
+# order by alphabet(name col) in ascending(ASC) (by default)
+SELECT * FROM bands ORDER BY name;
+SELECT * FROM bands ORDER BY name DESC; 
+
+INSERT INTO albums (name, release_year, band_id)
+VALUES ('The Number of the Beasts', 1985, 101),
+	('Power Slave', 1984, 102),
+    ('Nightmare', 2018, 102),
+    ('Nightmare', 2010, 103),
+    ('Test Album', NULL, 103);
+
+SELECT * FROM albums;
+-- ALTER TABLE albums AUTO_INCREMENT = 1;
+
+SELECT name FROM albums;
+SELECT DISTINCT name FROM albums;	-- gives unique names, no repeat
+
+-- alter (add, delete, modify) attributes/col
+-- update value of records/row
+UPDATE albums
+SET release_year = 1982
+WHERE id = 1;
+
+UPDATE albums
+SET band_id = 101
+WHERE name = 'Power Slave';
+
+-- UPDATE albums
+-- SET id = 5
+-- WHERE id = 20;
+
+/*
+Doesn't work----------------
+UPDATE [table] SET DATA=ELT(FIELD(ID,
+   13, 14, 15, 16, 17, 18, 19),'FOO', 'ASD', 'FGH', 'JKL', 'QWE', 'BAR');
+*/
+
+/*
+Doesn't work coz of name = NOT NULL----------------
+ insert into ...on duplicate key update
+-------------------------------------
+insert into [table](ID,DATA) 
+values(23,'FOO'),(47,'ASD'),(54,'DSF')..,
+on duplicate key update DATA=values(DATA)
+*/
+
+SELECT * FROM albums
+WHERE release_year < 2000;
+
+SELECT * FROM albums
+WHERE name LIKE '%er%' OR band_id = 102;		-- % means any amount of random characters
+
+SELECT * FROM albums
+WHERE release_year = 1984 AND band_id = 101;
+
+SELECT * FROM albums
+WHERE release_year BETWEEN 2000 AND	2018;
+
+SELECT * FROM albums
+WHERE release_year IS NULL;
+
+-- DROP attributes/col, table
+-- DELETE records/row
+DELETE FROM albums
+WHERE id = 5;
+
+
+# JOIN statements------------------
+SELECT * FROM albums
+JOIN bands ON bands.id = albums.band_id;	 -- join on Foreign key
+-- 1st left albums , 2nd right bands
+
+SELECT * FROM bands
+INNER JOIN albums ON bands.id = albums.band_id;	-- by default (inner join)
+-- 1st left bands, 2nd right albums
+
+SELECT * FROM bands
+LEFT JOIN albums ON bands.id = albums.band_id;
+-- for the Left (bands), list everything even if relation (ankor has no band_id in albums) not found
+
+SELECT * FROM albums
+RIGHT JOIN bands ON bands.id = albums.band_id;
+-- for the Right (bands), list everything even if relation not found
+
+# AGGREGATE functions (runs on a group of data, if no group then whole table consider as 1 group)--------------
+SELECT AVG(release_year) FROM albums;	-- to check if we like Old or New music
+
+SELECT SUM(release_year) / COUNT(release_year) AS 'Average' FROM albums;
+
+SELECT band_id, COUNT(band_id) AS 'No. of Albums' FROM albums
+GROUP BY(band_id);		-- same band.id is squashed as one whole
+
+SELECT bands.name, COUNT(band_id) AS 'No. of Albums' 
+FROM albums JOIN bands ON bands.id = albums.band_id
+GROUP BY(albums.band_id);	-- band_id will be displayed by default
+
+-- count can be done by (b.id OR a.id) does NOT matter, group by() matters
+SELECT b.name AS band_name, COUNT(a.id) AS no_of_albums		
+FROM bands AS b												-- alias col name
+LEFT JOIN albums AS a ON b.id = a.band_id 					-- Left join, bands display even if NO albums(0)
+GROUP BY b.id;												-- same b.id is squashed, to get unique album
+
+# WHERE -> filter for single col, coz it happens/executes before GroupBy
+# HAVING -> filter for Aggregate group of col, coz it happens after GroupBy
+
+SELECT b.name AS band_name, COUNT(a.id) AS no_of_albums
+FROM bands AS B
+LEFT JOIN albums AS a ON b.id = a.band_id
+-- WHERE b.name = 'Deuce'
+GROUP BY b.id
+HAVING no_of_albums = 1;
