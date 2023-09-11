@@ -1,3 +1,5 @@
+mySQL workbench file extension = .mwb
+
 https://www.simplilearn.com/tutorials/sql-tutorial/sql-advanced
 https://www.guru99.com/er-diagram-tutorial-dbms.html
 https://www.edrawsoft.com/article/er-diagrams-for-library-management-system.html
