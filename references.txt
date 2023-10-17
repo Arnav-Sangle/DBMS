@@ -6,3 +6,10 @@ https://www.edrawsoft.com/article/er-diagrams-for-library-management-system.html
 https://stackoverflow.com/questions/6889065/inserting-multiple-rows-in-mysql    (for inserting multiple rows at once)
 https://stackoverflow.com/questions/20452820/how-do-you-create-a-super-key-in-a-table   (superkey creation)
 https://www.educba.com/alternate-key-in-sql/    (Alternate key declaration with example)
+
+
+
+MongoDB
+https://www.digitalocean.com/community/tutorials/how-to-use-schema-validation-in-mongodb
+https://www.w3schools.com/mongodb/mongodb_schema_validation.php
+https://www.w3schools.in/mongodb/mongodb-delete-documents
